@@ -1,0 +1,7 @@
+
+Name: logbench
+Description: C++ logging library benchmark library.
+URL: https://github.com/denesderhan/logbench
+Version: @LOGBENCH_VERSION@
+CFlags: -I@PKG_INCLUDEDIR@ @PKG_DEFINES@
+Libs: -L@PKG_LIBDIR@ -l@PKG_LIBNAME@ -pthread
