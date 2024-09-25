@@ -43,7 +43,7 @@ df = df[df['lib_name'] != 'noop']
 df['name'] = df['lib_name'] + '_' + df['lib_ver']
 df = df[['name', 'idle', 'slow', 'medium', 'fast']]
 
-df.sort_values(by=['medium'], inplace=True)
+df.sort_values(by=['slow'], inplace=True)
 curdoc().theme = 'dark_minimal'
 source = ColumnDataSource(df)
 lib_names = source.data['name'].tolist()
@@ -79,7 +79,7 @@ for axis_type in [ "log", "linear" ]:
 	p.legend.title='Number of log calls /thread /sec (4 thread, 100 second)'
 	p.legend.title_text_color='#a0a0a0'
 
-	p.add_layout(Title(text='benchmark:    logbench ./bin -o ./results -c 5000 -b ./ramdrive -t 4 -p 1 5 -l <0|50|5000|50000> -w 0 -d 100000 --dropped\nlog call:           LOG("Thr: {} Log_n: {} Time: {} {} {}", (int) thread, (uint64_t) log_no, (uint64_t) nanosec, double(123.456789), <float>::infinity());\noutput:            2024-08-04 17:58:43,734915 +0200 INFO .../logger.hpp:42 Thr: 1 Log_n: 1 Time: 1202671383528328 123.456789 inf', align="left", text_color='#909090'), "below")
+	p.add_layout(Title(text='benchmark:    logbench ./bin -o ./results -c 5000 -b ./ramdrive -t 4 -p 1 5 -l <0|50|5000|50000> -w 0 -d 100000 --dropped\nlog call:           LOG("Thr: {} Log_n: {} Time: {} {} {}", (int) thread, (uint64_t) log_no, (uint64_t) nanosec, double(123.456789), <float>::infinity());\noutput:            2024-08-04 17:58:43.734915 +0200 INFO .../logger.hpp:42 Thr: 1 Log_n: 1 Time: 1202671383528328 123.456789 inf', align="left", text_color='#909090'), "below")
 	panel = TabPanel(child=p, title=axis_type)
 	panels.append(panel)
 	

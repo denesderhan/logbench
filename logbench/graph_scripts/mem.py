@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 from bokeh.plotting import figure, output_file, save
+from bokeh.models.tools import HoverTool
 from bokeh.models import ColumnDataSource, LabelSet, Title
 from bokeh.io import curdoc
 
@@ -32,8 +33,6 @@ p.xgrid.grid_line_color = None	#remove the x grid lines
 p.ygrid.grid_line_color = '#a0a0a0'
 p.ygrid.minor_grid_line_color = '#303030'
 
-p.add_layout(Title(text='benchmark:    logbench ./bin -o ./results -c 10000 -b ./ramdrive -t 4 -p 1 5 -l 100000 -w 0 -d 0 --dropped\nlog call:           LOG("Thr: {} Log_n: {} Time: {} {} {}", (int) thread, (uint64_t) log_no, (uint64_t) nanosec, double(123.456789), <float>::infinity());\noutput:            2024-08-04 17:58:43,734915 +0200 INFO .../logger.hpp:42 Thr: 1 Log_n: 1 Time: 1202671383528328 123.456789 inf', align="left", text_color='#909090' ), "below")
-
-label = LabelSet(x='name', y=0.5, text='peak_memory', level='glyph', text_align='center', source=source, text_color='#cccccc')
-p.add_layout(label)
+p.add_layout(Title(text='benchmark:    logbench ./bin -o ./results -c 10000 -b ./ramdrive -t 4 -p 1 5 -l 100000 -w 0 -d 0 --dropped\nlog call:           LOG("Thr: {} Log_n: {} Time: {} {} {}", (int) thread, (uint64_t) log_no, (uint64_t) nanosec, double(123.456789), <float>::infinity());\noutput:            2024-08-04 17:58:43.734915 +0200 INFO .../logger.hpp:42 Thr: 1 Log_n: 1 Time: 1202671383528328 123.456789 inf', align="left", text_color='#909090' ), "below")
+p.add_tools(HoverTool(tooltips="@peak_memory", mode="vline", anchor='top_center'))
 save(p)

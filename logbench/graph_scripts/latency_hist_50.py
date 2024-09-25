@@ -36,8 +36,8 @@ if len(sys.argv) > 1 :
 
 x_max = dstat['latency_max'].max()
 x_min = dstat['latency_min'].min()
-x_zoom_max = dstat['latency_90th'].max() * 2
-x_zoom_min = x_min
+x_zoom_max = dstat['latency_90th'].max() * 5
+x_zoom_min = x_min * 0.8
 
 dstat.sort_values(by=['latency_median'], inplace=True)
 
@@ -132,7 +132,7 @@ p2.legend.ncols=8
 p1.legend.click_policy='hide'
 p2.legend.click_policy='hide'
 
-p2.add_layout(Title(text='benchmark:    logbench ./bin -o ./results -c 10000 -b ./ramdrive -t 4 -p 1 5 -l 1500 -w 100000 -d 30000 --dropped\nlog call:           LOG("Thr: {} Log_n: {} Time: {} {} {}", (int) thread, (uint64_t) log_no, (uint64_t) nanosec, double(123.456789), <float>::infinity());\noutput:            2024-08-04 17:58:43,734915 +0200 INFO .../logger.hpp:42 Thr: 1 Log_n: 1 Time: 1202671383528328 123.456789 inf', align="left", text_color='#909090'), "below")
+p2.add_layout(Title(text='benchmark:    logbench ./bin -o ./results -c 10000 -b ./ramdrive -t 4 -p 1 5 -l 1500 -w 100000 -d 30000 --dropped\nlog call:           LOG("Thr: {} Log_n: {} Time: {} {} {}", (int) thread, (uint64_t) log_no, (uint64_t) nanosec, double(123.456789), <float>::infinity());\noutput:            2024-08-04 17:58:43.734915 +0200 INFO .../logger.hpp:42 Thr: 1 Log_n: 1 Time: 1202671383528328 123.456789 inf', align="left", text_color='#909090'), "below")
 
 vp = column(p1, p2)
 

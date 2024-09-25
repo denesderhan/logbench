@@ -1,5 +1,5 @@
 # logbench
-C++ logging library benchmark library.
+C++ logging library benchmark utility.
 
 ### Alpha release 
 The library is in alpha release.

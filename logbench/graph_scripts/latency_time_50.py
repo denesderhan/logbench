@@ -87,7 +87,7 @@ for ind in reversed(range(0, len(lib_names))):
 
 p.title.text_font_size = '16pt'
 p.title.align = 'center'
-p.title.text ='Latency time diagrams (50 logs/sec; thread 0)'
+p.title.text ='Latency time graphs (50 logs/sec; thread 0)'
 p.xaxis.axis_label = 'time (second)'
 p.yaxis.axis_label = 'latency (nanosecond)'
 p.xaxis.ticker.num_minor_ticks=10
@@ -102,6 +102,6 @@ p.legend.ncols=8
 p.legend.items = list(reversed(p.legend[0].items))
 p.legend.click_policy='hide'
 
-p.add_layout(Title(text='benchmark:    logbench ./bin -o ./results -c 10000 -b ./ramdrive -t 4 -p 1 5 -l 1500 -w 100000 -d 30000 --dropped\nlog call:           LOG("Thr: {} Log_n: {} Time: {} {} {}", (int) thread, (uint64_t) log_no, (uint64_t) nanosec, double(123.456789), <float>::infinity());\noutput:            2024-08-04 17:58:43,734915 +0200 INFO .../logger.hpp:42 Thr: 1 Log_n: 1 Time: 1202671383528328 123.456789 inf', align="left", text_color='#909090'), "below")
+p.add_layout(Title(text='benchmark:    logbench ./bin -o ./results -c 10000 -b ./ramdrive -t 4 -p 1 5 -l 1500 -w 100000 -d 30000 --dropped\nlog call:           LOG("Thr: {} Log_n: {} Time: {} {} {}", (int) thread, (uint64_t) log_no, (uint64_t) nanosec, double(123.456789), <float>::infinity());\noutput:            2024-08-04 17:58:43.734915 +0200 INFO .../logger.hpp:42 Thr: 1 Log_n: 1 Time: 1202671383528328 123.456789 inf', align="left", text_color='#909090'), "below")
 
 save(p)
