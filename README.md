@@ -28,7 +28,8 @@ ninja install
 
 ## Usage
 Build a benchmark executable using the logbench library.
-examples: http://github.com/denesderhan/loglib_benchmarks
+examples: 
+* http://github.com/denesderhan/loglib_benchmarks
 
 Run the benchmark using the logbench executable:
 ~~~

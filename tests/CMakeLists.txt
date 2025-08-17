@@ -31,7 +31,7 @@ target_include_directories(logbench_tests PRIVATE
 # Dependencies
 ################################################################################
 
-find_package(Catch2 REQUIRED)
+find_package(Catch2 CONFIG REQUIRED)
 target_link_libraries(logbench_tests
     PRIVATE logbench::logbench
 	PRIVATE Catch2::Catch2

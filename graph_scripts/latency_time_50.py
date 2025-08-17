@@ -87,7 +87,7 @@ for ind in reversed(range(0, len(lib_names))):
 
 p.title.text_font_size = '16pt'
 p.title.align = 'center'
-p.title.text ='Latency time graphs (50 logs/sec; thread 0)'
+p.title.text ='Latency time diagrams (50 logs/sec; thread 0)'
 p.xaxis.axis_label = 'time (second)'
 p.yaxis.axis_label = 'latency (nanosecond)'
 p.xaxis.ticker.num_minor_ticks=10
@@ -98,7 +98,7 @@ p.xgrid.grid_line_color = '#909090'
 p.xgrid.minor_grid_line_color = '#303030'
 p.ygrid.grid_line_color = '#909090'
 p.ygrid.minor_grid_line_color = '#303030'
-p.legend.ncols=8
+p.legend.ncols=7
 p.legend.items = list(reversed(p.legend[0].items))
 p.legend.click_policy='hide'
 

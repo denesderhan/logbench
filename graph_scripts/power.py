@@ -41,9 +41,10 @@ df['fast'] = (df['fast'] - noop_fast) / 1000000
 df = df[df['lib_name'] != 'noop']
 
 df['name'] = df['lib_name'] + '_' + df['lib_ver']
-df = df[['name', 'idle', 'slow', 'medium', 'fast']]
+df['mid'] = (df['slow'] + df['medium']) / 2
+df = df[['name', 'idle', 'slow', 'medium', 'fast', 'mid']]
 
-df.sort_values(by=['slow'], inplace=True)
+df.sort_values(by=['mid'], inplace=True)
 curdoc().theme = 'dark_minimal'
 source = ColumnDataSource(df)
 lib_names = source.data['name'].tolist()
@@ -58,7 +59,7 @@ for axis_type in [ "log", "linear" ]:
 
 	p.title.text_font_size = '16pt'
 	p.title.align = 'center'
-	p.title.text ='CPU cycles used for logging'
+	p.title.text ='Power usage'
 	p.yaxis.axis_label = 'Million CPU cycles'
 	p.xaxis.major_label_orientation = 0.5
 	p.xgrid.grid_line_color = None	#remove the x grid lines

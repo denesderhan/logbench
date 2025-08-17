@@ -28,7 +28,7 @@ dstat = pd.read_csv('results\\logtest1_t4_l1500_w100000_d30000_latency_0x358db4a
 name_string = 'latency_hist_50'
 if len(sys.argv) > 1 :
 	if str(sys.argv[1]) == 'a' :
-		dstat = dstat[((dstat['latency_median'] > 100.0) & (dstat['latency_median'] <= 10000.0))]
+		dstat = dstat[dstat['latency_median'] <= 10000.0]
 		name_string += '_a'
 	elif str(sys.argv[1]) == 'b' :
 		dstat = dstat[dstat['latency_median'] > 10000.0]
@@ -36,8 +36,8 @@ if len(sys.argv) > 1 :
 
 x_max = dstat['latency_max'].max()
 x_min = dstat['latency_min'].min()
-x_zoom_max = dstat['latency_90th'].max() * 5
-x_zoom_min = x_min * 0.8
+x_zoom_max = dstat['latency_90th'].max() * 2
+x_zoom_min = x_min
 
 dstat.sort_values(by=['latency_median'], inplace=True)
 
@@ -126,13 +126,13 @@ p2.xgrid.grid_line_color = '#909090'
 p2.xgrid.minor_grid_line_color = '#303030'
 
 p1.legend.items = list(reversed(p1.legend[0].items))
-p1.legend.ncols=8
+p1.legend.ncols=7
 p2.legend.items = list(reversed(p2.legend[0].items))
-p2.legend.ncols=8
+p2.legend.ncols=7
 p1.legend.click_policy='hide'
 p2.legend.click_policy='hide'
 
-p2.add_layout(Title(text='benchmark:    logbench ./bin -o ./results -c 10000 -b ./ramdrive -t 4 -p 1 5 -l 1500 -w 100000 -d 30000 --dropped\nlog call:           LOG("Thr: {} Log_n: {} Time: {} {} {}", (int) thread, (uint64_t) log_no, (uint64_t) nanosec, double(123.456789), <float>::infinity());\noutput:            2024-08-04 17:58:43.734915 +0200 INFO .../logger.hpp:42 Thr: 1 Log_n: 1 Time: 1202671383528328 123.456789 inf', align="left", text_color='#909090'), "below")
+p2.add_layout(Title(text='benchmark:    logbench ./bin -o ./results -c 10000 -b ./ramdrive -t 4 -p 1 5 -l 1500 -w 100000 -d 30000 --dropped\nlog call:           LOG("Thr: {} Log_n: {} Time: {} {} {}", (int) thread, (uint64_t) log_no, (uint64_t) nanosec, double(123.456789), <float>::infinity());\noutput:            2024-08-04 17:58:43,734915 +0200 INFO .../logger.hpp:42 Thr: 1 Log_n: 1 Time: 1202671383528328 123.456789 inf', align="left", text_color='#909090'), "below")
 
 vp = column(p1, p2)
 

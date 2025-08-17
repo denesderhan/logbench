@@ -31,7 +31,7 @@ for axis_type in ["log", "linear"]:
 	p.title.text_font_size = '16pt'
 	p.title.align = 'center'
 	p.title.text ='Latency statistics at 50 logs/second/thread (4 threads)'
-	p.yaxis.axis_label = 'Latency of log call (nanosecond)'
+	p.yaxis.axis_label = 'nanosecond'
 	if (axis_type == "log") :
 		p.yaxis.ticker = LogTicker(num_minor_ticks=10)
 	p.xaxis.major_label_orientation = 0.5
