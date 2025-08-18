@@ -23,8 +23,9 @@ namespace logbench {
                 if (test_data_.bench_version != 
                     std::string_view{ LOGBENCHLIB_VERSION })
                 {
-                    throw std::runtime_error(
-                        "Logbench library versions mismatch! ver: " LOGBENCHLIB_VERSION);
+                    std::string error_msg = "Logbench library versions mismatch! benchmark bin: " LOGBENCHLIB_VERSION " logbench: ";
+                    error_msg += std::string_view{ test_data_.bench_version };
+                    throw std::runtime_error(error_msg);
                 }
                 //auto& self = reinterpret_cast<test<logger>>(*this);
                 out_data_.test_name = std::string_view{ test_name };
