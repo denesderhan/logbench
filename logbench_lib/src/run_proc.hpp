@@ -5,5 +5,5 @@
 #include <logbench/proc_run_stats.hpp>
 
 namespace logbench {
-	void run_proc(std::string const& path, proc_run_stats& stats) noexcept;
+    void run_proc(std::string const& path, proc_run_stats& stats) noexcept;
 }

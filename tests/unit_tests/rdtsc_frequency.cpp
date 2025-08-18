@@ -8,9 +8,9 @@
 #include <logbench/rdtsc_frequency.hpp>
 
 TEST_CASE("rdtsc_frequency") {
-	SECTION("uint32_t_1") {
-		double freq = logbench::rdtsc_freq_GHz();
-		CHECK(!std::isnan(freq));
-		CHECK(freq > 0.0);
-	};
+    SECTION("uint32_t_1") {
+        double freq = logbench::rdtsc_freq_GHz();
+        CHECK(!std::isnan(freq));
+        CHECK(freq > 0.0);
+    };
 }

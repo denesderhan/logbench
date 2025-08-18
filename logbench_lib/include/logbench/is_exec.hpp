@@ -5,5 +5,5 @@
 #include <filesystem>
 
 namespace logbench {
-	LOGBENCH_API bool is_exec(std::filesystem::path const& path);
+    LOGBENCH_API bool is_exec(std::filesystem::path const& path);
 }

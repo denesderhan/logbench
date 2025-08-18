@@ -10,21 +10,21 @@
 #include <logbench/store_path.hpp>
 
 namespace logbench {
-	bool is_exec(std::filesystem::path const& path) {
-		if (!std::filesystem::is_regular_file(path)) {
-			return false;
-		}
-		logbench::small_string<256> c_path;
-		store_path(c_path, path);
-		if (path.string().size() != c_path.size()) {
-			return false;
-		}
-		DWORD exe_type;
-		if (!GetBinaryTypeA(c_path.data(), &exe_type)) {
-			return false;
-		}
-		return true;
-	}
+    bool is_exec(std::filesystem::path const& path) {
+        if (!std::filesystem::is_regular_file(path)) {
+            return false;
+        }
+        logbench::small_string<256> c_path;
+        store_path(c_path, path);
+        if (path.string().size() != c_path.size()) {
+            return false;
+        }
+        DWORD exe_type;
+        if (!GetBinaryTypeA(c_path.data(), &exe_type)) {
+            return false;
+        }
+        return true;
+    }
 }
 
 #endif

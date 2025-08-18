@@ -15,12 +15,12 @@ namespace logbench {
 
         bool initialized() const noexcept;
         void* data() const noexcept;
-		std::size_t size() const noexcept;
+        std::size_t size() const noexcept;
         static std::size_t page_size() noexcept;
         void create(std::size_t buffer_size);
         void open(std::size_t buffer_size);
         void close() noexcept;
-		void remove() noexcept {}
+        void remove() noexcept {}
     private:
         void lock_mem_to_phys();
 

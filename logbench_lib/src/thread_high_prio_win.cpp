@@ -10,16 +10,16 @@
 #include <system_error>
 
 namespace logbench {
-	void thread_high_prio() {
-		if (!SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST)) {
-			throw std::system_error{
-				std::error_code{
-					static_cast<int>(GetLastError()),
-						std::system_category()
-				},
-					"Could not set thread priority to highest!"
-			};
-		}
-	}
+    void thread_high_prio() {
+        if (!SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST)) {
+            throw std::system_error{
+                std::error_code{
+                    static_cast<int>(GetLastError()),
+                        std::system_category()
+                },
+                    "Could not set thread priority to highest!"
+            };
+        }
+    }
 }
 #endif

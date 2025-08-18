@@ -25,7 +25,7 @@ p.title.text ='Max throughput of log system'
 p.yaxis.axis_label = 'Throughput (1000 lines / second)'
 p.yaxis.formatter = PrintfTickFormatter(format="%1.1f")
 p.xaxis.major_label_orientation = 0.5
-p.xgrid.grid_line_color = None	#remove the x grid lines
+p.xgrid.grid_line_color = None    #remove the x grid lines
 p.y_range.start = 0
 p.ygrid.grid_line_color = '#a0a0a0'
 p.ygrid.minor_grid_line_color = '#303030'

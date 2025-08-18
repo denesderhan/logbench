@@ -4,5 +4,5 @@
 #include <logbench/api_def.hpp>
 
 namespace logbench {
-	LOGBENCH_API double rdtsc_freq_GHz();
+    LOGBENCH_API double rdtsc_freq_GHz();
 }

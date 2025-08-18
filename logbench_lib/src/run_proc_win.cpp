@@ -122,7 +122,7 @@ namespace logbench {
             if (stats.exit_code == 0) {
                 stats.exit_code = 1;
             }
-			stats.error = small_string<128>{ ex.what() };
+            stats.error = small_string<128>{ ex.what() };
         }
     }
 }

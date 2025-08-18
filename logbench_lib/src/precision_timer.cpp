@@ -11,14 +11,14 @@
 #endif
 
 namespace logbench {
-	precision_timer::precision_timer()
-		: timer_{ std::move(std::make_unique<precision_timer_impl>()) } {
-	}
-	precision_timer::~precision_timer() = default;
-	
-	void precision_timer::sleep(std::uint64_t nanosec) {
-		timer_->sleep(nanosec);
-	}
+    precision_timer::precision_timer()
+        : timer_{ std::move(std::make_unique<precision_timer_impl>()) } {
+    }
+    precision_timer::~precision_timer() = default;
+    
+    void precision_timer::sleep(std::uint64_t nanosec) {
+        timer_->sleep(nanosec);
+    }
 };
 
 

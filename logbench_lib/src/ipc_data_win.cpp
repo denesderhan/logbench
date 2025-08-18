@@ -22,11 +22,11 @@ namespace logbench {
         return PVOID(buff_ptr_);
     }
 
-	std::size_t ipc_data::size() const noexcept {
+    std::size_t ipc_data::size() const noexcept {
         return buffer_size_;
     }
 
-	std::size_t ipc_data::page_size() noexcept {
+    std::size_t ipc_data::page_size() noexcept {
         SYSTEM_INFO sys_info;
         GetSystemInfo(&sys_info);
         return sys_info.dwPageSize;
@@ -56,7 +56,7 @@ namespace logbench {
         }
     }
 
-	void ipc_data::create(std::size_t buffer_size) {
+    void ipc_data::create(std::size_t buffer_size) {
         if (buff_ptr_ != NULL)
         {
             throw std::runtime_error("Resource already initialized!");
@@ -105,7 +105,7 @@ namespace logbench {
             && "Memory buffer not aligned to page size!"
         );
         lock_mem_to_phys();
-	}
+    }
 
     void ipc_data::open(std::size_t buffer_size) {
         if (buff_ptr_ != NULL)

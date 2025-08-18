@@ -9,7 +9,7 @@ source_group("Source Files" FILES ${src})
 set(includes
     "parse_par.hpp"
     "version.hpp"
-	"clipp.h"
+    "clipp.h"
 )
 
 source_group("Header Files" FILES ${includes})
@@ -21,13 +21,13 @@ set(ALL_FILES
 
 add_executable(logbench_run ${ALL_FILES})
 set_target_properties(logbench_run PROPERTIES 
-	OUTPUT_NAME "logbench"
-	DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}
+    OUTPUT_NAME "logbench"
+    DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX}
 )
 
 target_include_directories(logbench_run PRIVATE
-	"./"
-	"../logbench_lib/include"
+    "./"
+    "../logbench_lib/include"
 )
 
 ################################################################################
@@ -39,6 +39,6 @@ target_link_libraries(logbench_run
 )
 
 install(
-	TARGETS logbench_run
+    TARGETS logbench_run
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

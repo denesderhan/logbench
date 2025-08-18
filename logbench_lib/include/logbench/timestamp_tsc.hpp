@@ -12,25 +12,25 @@
 #include <logbench/force_inline.hpp>
 
 namespace logbench {
-	LOGBENCH_FORCEINLINE auto timestamp_tsc(unsigned int &id) noexcept {
-		_mm_mfence();
-		_mm_lfence();
-		auto tsc = __rdtscp(&id);
-		_mm_lfence();
-		return tsc;
-	}
+    LOGBENCH_FORCEINLINE auto timestamp_tsc(unsigned int &id) noexcept {
+        _mm_mfence();
+        _mm_lfence();
+        auto tsc = __rdtscp(&id);
+        _mm_lfence();
+        return tsc;
+    }
 }
 #elif defined(__ARM_ARCH_ISA_A64)
 #include <sched.h>
 #include <logbench/force_inline.hpp>
 namespace logbench {
-	LOGBENCH_FORCEINLINE auto timestamp_tsc(unsigned int &id) noexcept {
-		unsigned int node;
-		getcpu(&id, &node);
-		std::uint64_t cntvct;
-		asm volatile ("isb; mrs %0, cntvct_el0; isb; " : "=r"(cntvct) :: "memory");
-		return cntvct;
-	}
+    LOGBENCH_FORCEINLINE auto timestamp_tsc(unsigned int &id) noexcept {
+        unsigned int node;
+        getcpu(&id, &node);
+        std::uint64_t cntvct;
+        asm volatile ("isb; mrs %0, cntvct_el0; isb; " : "=r"(cntvct) :: "memory");
+        return cntvct;
+    }
 }
 #else
 #error timestamp_tsc() not implemented for this architecture.

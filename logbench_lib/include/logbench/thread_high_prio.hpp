@@ -4,5 +4,5 @@
 #include <logbench/api_def.hpp>
 
 namespace logbench {
-	LOGBENCH_API void thread_high_prio();
+    LOGBENCH_API void thread_high_prio();
 }

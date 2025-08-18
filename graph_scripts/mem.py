@@ -28,7 +28,7 @@ p.title.align = 'center'
 p.title.text ='Peak memory used at max throughput'
 p.yaxis.axis_label = 'Memory (Mb)'
 p.xaxis.major_label_orientation = 0.5
-p.xgrid.grid_line_color = None	#remove the x grid lines
+p.xgrid.grid_line_color = None    #remove the x grid lines
 p.ygrid.grid_line_color = '#a0a0a0'
 p.ygrid.minor_grid_line_color = '#303030'
 

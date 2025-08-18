@@ -10,16 +10,16 @@
 #include <system_error>
 
 namespace logbench {
-	void proc_high_prio() {
-		if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS)) {
-			throw std::system_error{
-				std::error_code{
-					static_cast<int>(GetLastError()),
-						std::system_category()
-				},
-					"Could not set process priority to high!"
-			};
-		}
-	}
+    void proc_high_prio() {
+        if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS)) {
+            throw std::system_error{
+                std::error_code{
+                    static_cast<int>(GetLastError()),
+                        std::system_category()
+                },
+                    "Could not set process priority to high!"
+            };
+        }
+    }
 }
 #endif

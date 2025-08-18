@@ -5,8 +5,8 @@
 #include <logbench/thread_high_prio.hpp>
 
 namespace logbench {
-	void thread_high_prio() {
-		//FIX THIS
-	}
+    void thread_high_prio() {
+        //FIX THIS
+    }
 }
 #endif

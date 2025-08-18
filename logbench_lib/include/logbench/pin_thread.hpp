@@ -7,12 +7,12 @@
 #include <logbench/api_def.hpp>
 
 namespace logbench {
-	class pin_thread {
-	public:
-		LOGBENCH_API static void set_pins(std::pair<int, int> core_interval) noexcept;
-		LOGBENCH_API static void pin(int thread_number);
+    class pin_thread {
+    public:
+        LOGBENCH_API static void set_pins(std::pair<int, int> core_interval) noexcept;
+        LOGBENCH_API static void pin(int thread_number);
 
-	private:
-		inline static std::array<int, 32> thread_to_core_{};
-	};
+    private:
+        inline static std::array<int, 32> thread_to_core_{};
+    };
 }

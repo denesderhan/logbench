@@ -61,7 +61,7 @@ namespace logbench {
                 }
             }
             catch (const std::exception& ex) {
-				this->out_data_.out_message = std::string_view{ ex.what() };
+                this->out_data_.out_message = std::string_view{ ex.what() };
                 this->bench_data_.set_data(this->out_data_);
                 throw ex;
             }
@@ -70,9 +70,9 @@ namespace logbench {
         LOGBENCH_FORCEINLINE static void log(
             logger& logger_,
             int id, 
-			std::uint64_t i,
+            std::uint64_t i,
             [[maybe_unused]] std::uint64_t thr_dummy,
-			std::uint64_t call_time)
+            std::uint64_t call_time)
         {
             logger_.log_test1(id, i, call_time, double(123.456789), std::numeric_limits<float>::infinity());
         }

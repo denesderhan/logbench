@@ -20,14 +20,14 @@ namespace logbench {
                 bench_data_.get_data(test_data_);
                 //FIX THIS fill out_data_ !!! from logger
                 bench_data_.get_data(out_data_);
-				if (test_data_.bench_version != 
-					std::string_view{ LOGBENCHLIB_VERSION })
+                if (test_data_.bench_version != 
+                    std::string_view{ LOGBENCHLIB_VERSION })
                 {
                     throw std::runtime_error(
                         "Logbench library versions mismatch! ver: " LOGBENCHLIB_VERSION);
                 }
                 //auto& self = reinterpret_cast<test<logger>>(*this);
-				out_data_.test_name = std::string_view{ test_name };
+                out_data_.test_name = std::string_view{ test_name };
 
                 logger::sys_init(test_data_, out_data_);
                 pin_thread::set_pins(test_data_.pin_to_cores);
@@ -42,7 +42,7 @@ namespace logbench {
             }
             catch (const std::exception& ex) {
                 if (bench_data_.initialized()) {
-					out_data_.out_message = std::string_view{ ex.what() };
+                    out_data_.out_message = std::string_view{ ex.what() };
                     bench_data_.set_data(out_data_);
                 }
                 throw ex;

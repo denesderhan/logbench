@@ -51,38 +51,38 @@ lib_names = source.data['name'].tolist()
 
 panels = []
 for axis_type in [ "log", "linear" ]:
-	p = figure(x_range=lib_names, y_axis_type = axis_type, width=1200, height=400)
-	b1 = p.vbar(x=dodge('name', -0.3, range=p.x_range), top='idle', bottom = 0.1, source=source, width=0.15, color='green', fill_alpha=0.7, line_color=None, legend_label='0')
-	b2 = p.vbar(x=dodge('name', -0.1, range=p.x_range), top='slow', bottom = 0.1, source=source, width=0.15, color='orange', fill_alpha=0.7, line_color=None, legend_label='0.5')
-	b3 = p.vbar(x=dodge('name', 0.1, range=p.x_range), top='medium', bottom = 0.1, source=source, width=0.15, color='magenta', fill_alpha=0.7, line_color=None, legend_label='50')
-	b4 = p.vbar(x=dodge('name', 0.3, range=p.x_range), top='fast', bottom = 0.1, source=source, width=0.15, color='red', fill_alpha=0.7, line_color=None, legend_label='500')
+    p = figure(x_range=lib_names, y_axis_type = axis_type, width=1200, height=400)
+    b1 = p.vbar(x=dodge('name', -0.3, range=p.x_range), top='idle', bottom = 0.1, source=source, width=0.15, color='green', fill_alpha=0.7, line_color=None, legend_label='0')
+    b2 = p.vbar(x=dodge('name', -0.1, range=p.x_range), top='slow', bottom = 0.1, source=source, width=0.15, color='orange', fill_alpha=0.7, line_color=None, legend_label='0.5')
+    b3 = p.vbar(x=dodge('name', 0.1, range=p.x_range), top='medium', bottom = 0.1, source=source, width=0.15, color='magenta', fill_alpha=0.7, line_color=None, legend_label='50')
+    b4 = p.vbar(x=dodge('name', 0.3, range=p.x_range), top='fast', bottom = 0.1, source=source, width=0.15, color='red', fill_alpha=0.7, line_color=None, legend_label='500')
 
-	p.title.text_font_size = '16pt'
-	p.title.align = 'center'
-	p.title.text ='Power usage'
-	p.yaxis.axis_label = 'Million CPU cycles'
-	p.xaxis.major_label_orientation = 0.5
-	p.xgrid.grid_line_color = None	#remove the x grid lines
-	if (axis_type == "log") :
-		p.y_range.start = 1
-		p.yaxis.ticker = LogTicker(num_minor_ticks=10)
-	p.ygrid.grid_line_color = '#a0a0a0'
-	p.ygrid.minor_grid_line_color = '#303030'
+    p.title.text_font_size = '16pt'
+    p.title.align = 'center'
+    p.title.text ='Power usage'
+    p.yaxis.axis_label = 'Million CPU cycles'
+    p.xaxis.major_label_orientation = 0.5
+    p.xgrid.grid_line_color = None    #remove the x grid lines
+    if (axis_type == "log") :
+        p.y_range.start = 1
+        p.yaxis.ticker = LogTicker(num_minor_ticks=10)
+    p.ygrid.grid_line_color = '#a0a0a0'
+    p.ygrid.minor_grid_line_color = '#303030'
 
-	p.add_tools(HoverTool(tooltips="@idle{0.2f}"+" Mcyc", formatters={'@idle{0.2f}' : 'printf'}, renderers=[b1], mode="vline", anchor='top_center'))
-	p.add_tools(HoverTool(tooltips="@slow{0.2f}"+" Mcyc", formatters={'@slow{0.2f}' : 'printf'}, renderers=[b2], mode="vline", anchor='top_center'))
-	p.add_tools(HoverTool(tooltips="@medium{0.2f}"+" Mcyc", formatters={'@medium{0.2f}' : 'printf'}, renderers=[b3], mode="vline", anchor='top_center'))
-	p.add_tools(HoverTool(tooltips="@fast{0.2f}"+" Mcyc", formatters={'@fast{0.2f}' : 'printf'}, renderers=[b4], mode="vline", anchor='top_center'))
+    p.add_tools(HoverTool(tooltips="@idle{0.2f}"+" Mcyc", formatters={'@idle{0.2f}' : 'printf'}, renderers=[b1], mode="vline", anchor='top_center'))
+    p.add_tools(HoverTool(tooltips="@slow{0.2f}"+" Mcyc", formatters={'@slow{0.2f}' : 'printf'}, renderers=[b2], mode="vline", anchor='top_center'))
+    p.add_tools(HoverTool(tooltips="@medium{0.2f}"+" Mcyc", formatters={'@medium{0.2f}' : 'printf'}, renderers=[b3], mode="vline", anchor='top_center'))
+    p.add_tools(HoverTool(tooltips="@fast{0.2f}"+" Mcyc", formatters={'@fast{0.2f}' : 'printf'}, renderers=[b4], mode="vline", anchor='top_center'))
 
-	p.legend.location = 'top_left'
-	p.legend.click_policy='hide'
-	p.legend.orientation='horizontal'
-	p.legend.title='Number of log calls /thread /sec (4 thread, 100 second)'
-	p.legend.title_text_color='#a0a0a0'
+    p.legend.location = 'top_left'
+    p.legend.click_policy='hide'
+    p.legend.orientation='horizontal'
+    p.legend.title='Number of log calls /thread /sec (4 thread, 100 second)'
+    p.legend.title_text_color='#a0a0a0'
 
-	p.add_layout(Title(text='benchmark:    logbench ./bin -o ./results -c 5000 -b ./ramdrive -t 4 -p 1 5 -l <0|50|5000|50000> -w 0 -d 100000 --dropped\nlog call:           LOG("Thr: {} Log_n: {} Time: {} {} {}", (int) thread, (uint64_t) log_no, (uint64_t) nanosec, double(123.456789), <float>::infinity());\noutput:            2024-08-04 17:58:43.734915 +0200 INFO .../logger.hpp:42 Thr: 1 Log_n: 1 Time: 1202671383528328 123.456789 inf', align="left", text_color='#909090'), "below")
-	panel = TabPanel(child=p, title=axis_type)
-	panels.append(panel)
-	
+    p.add_layout(Title(text='benchmark:    logbench ./bin -o ./results -c 5000 -b ./ramdrive -t 4 -p 1 5 -l <0|50|5000|50000> -w 0 -d 100000 --dropped\nlog call:           LOG("Thr: {} Log_n: {} Time: {} {} {}", (int) thread, (uint64_t) log_no, (uint64_t) nanosec, double(123.456789), <float>::infinity());\noutput:            2024-08-04 17:58:43.734915 +0200 INFO .../logger.hpp:42 Thr: 1 Log_n: 1 Time: 1202671383528328 123.456789 inf', align="left", text_color='#909090'), "below")
+    panel = TabPanel(child=p, title=axis_type)
+    panels.append(panel)
+    
 tabs = Tabs(tabs=panels)
 save(tabs)

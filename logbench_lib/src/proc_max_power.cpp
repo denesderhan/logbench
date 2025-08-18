@@ -9,10 +9,10 @@
 #endif
 
 namespace logbench {
-	proc_max_power::proc_max_power() noexcept {
-		max_power_impl::set();
-	}
-	proc_max_power::~proc_max_power() noexcept {
-		max_power_impl::reset();
-	}
+    proc_max_power::proc_max_power() noexcept {
+        max_power_impl::set();
+    }
+    proc_max_power::~proc_max_power() noexcept {
+        max_power_impl::reset();
+    }
 }

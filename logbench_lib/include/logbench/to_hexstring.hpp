@@ -15,7 +15,7 @@ namespace logbench {
         static constexpr const char* digits = "0123456789abcdef";
         constexpr std::size_t hexlen = (sizeof(T) << 1) + hex_prefix * 2;
         char string[hexlen];
-		std::size_t ind = hexlen - 1;
+        std::size_t ind = hexlen - 1;
         do {
             string[ind--] = digits[num & 0x0f];
             num >>= 4;

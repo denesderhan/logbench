@@ -4,9 +4,9 @@
 namespace logbench {
     class max_power_impl {
     public:
-		max_power_impl() = default;
-		~max_power_impl() = default;
-		static void set() noexcept {}
-		static void reset() noexcept {}
+        max_power_impl() = default;
+        ~max_power_impl() = default;
+        static void set() noexcept {}
+        static void reset() noexcept {}
     };
 }

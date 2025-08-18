@@ -31,6 +31,6 @@ namespace logbench {
     private:
         std::mutex mtx_;
         std::condition_variable cv_;
-		std::size_t counter_;
+        std::size_t counter_;
     };
 }

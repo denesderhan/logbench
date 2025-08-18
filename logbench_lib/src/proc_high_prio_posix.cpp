@@ -5,8 +5,8 @@
 #include <sys/resource.h>
 
 namespace logbench {
-	void proc_high_prio() {
-		setpriority(PRIO_PROCESS, 0, -10);
-	}
+    void proc_high_prio() {
+        setpriority(PRIO_PROCESS, 0, -10);
+    }
 }
 #endif

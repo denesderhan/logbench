@@ -4,13 +4,13 @@
 #include <catch2/catch_all.hpp>
 
 int main(int argc, char* argv[]) {
-	// global setup...
-	//SetConsoleOutputCP(CP_UTF8);
+    // global setup...
+    //SetConsoleOutputCP(CP_UTF8);
 
-	int result = Catch::Session().run(argc, argv);
+    int result = Catch::Session().run(argc, argv);
 
-	// global clean-up...
+    // global clean-up...
 
-	return result;
+    return result;
 }
 
