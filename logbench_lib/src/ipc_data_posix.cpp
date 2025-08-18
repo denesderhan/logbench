@@ -3,14 +3,15 @@
 #ifndef _WIN32
 #include <ipc_data_posix.hpp>
 
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
-#include <system_error>
-#include <cassert>
-#include <unistd.h>
+#include <fcntl.h>
+#include <stdexcept>
 #include <sys/mman.h>
 #include <sys/stat.h>
-#include <fcntl.h>
+#include <system_error>
+#include <unistd.h>
 
 namespace logbench {
 

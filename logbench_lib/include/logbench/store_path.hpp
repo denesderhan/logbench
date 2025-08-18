@@ -5,6 +5,7 @@
 
 #include <cstddef>
 #include <filesystem>
+#include <stdexcept>
 
 namespace logbench {
     template <std::size_t N>

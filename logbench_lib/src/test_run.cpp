@@ -2,14 +2,15 @@
 //Distributed under the MIT license (https://opensource.org/license/mit).
 #include <logbench/test_run.hpp>
 
-#include <cstddef>
-#include <cstdint>
 #include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
 #include <filesystem>
 #include <fstream>
+#include <stdexcept>
 #include <vector>
-#include <cmath>
 #pragma intrinsic(memcpy)
 
 #include <logbench/is_exec.hpp>

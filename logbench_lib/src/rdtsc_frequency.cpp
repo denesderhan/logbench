@@ -2,6 +2,7 @@
 //Distributed under the MIT license (https://opensource.org/license/mit).
 #include <cstdint>
 #include <cstdlib>
+#include <stdexcept>
 
 #include <logbench/timestamp_tsc.hpp>
 #include <logbench/timestamp_nano.hpp>

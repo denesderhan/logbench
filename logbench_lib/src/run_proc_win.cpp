@@ -7,8 +7,9 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <psapi.h>
-#include <string>
+#include <stdexcept>
 #include <string_view>
+#include <string>
 
 #include <logbench/timestamp_nano.hpp>
 namespace logbench {

@@ -6,6 +6,7 @@
 #include <thread>
 #include <limits>
 #include <cstdint>
+#include <stdexcept>
 
 #include <logbench/proc_high_prio.hpp>
 #include <logbench/logger_thread.hpp>

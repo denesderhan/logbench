@@ -7,6 +7,8 @@
 #include <cassert>
 #include <cstdint>
 #include <cstddef>
+#include <stdexcept>
+
 namespace logbench {
 
     ipc_data::ipc_data() noexcept = default;
