@@ -19,3 +19,12 @@
     #define LOGBENCH_API
 #endif
 #endif
+
+#ifndef LOGBENCH_TEST_API
+    #ifdef LOGBENCH_TESTING
+        #define LOGBENCH_TEST_API LOGBENCH_API
+    #else
+        #define LOGBENCH_TEST_API
+    #endif
+#endif
+

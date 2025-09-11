@@ -1,7 +1,6 @@
 //Copyright © 2024, Dénes Derhán.
 //Distributed under the MIT license (https://opensource.org/license/mit).
 #if defined(_WIN32)
-
 #include <logbench/proc_high_prio.hpp>
 
 #define NOMINMAX

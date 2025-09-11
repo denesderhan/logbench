@@ -4,6 +4,8 @@
 #include <cstdlib>
 #include <stdexcept>
 
+#include <logbench/rdtsc_frequency.hpp>
+
 #include <logbench/timestamp_tsc.hpp>
 #include <logbench/timestamp_nano.hpp>
 

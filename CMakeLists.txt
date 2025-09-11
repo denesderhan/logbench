@@ -15,24 +15,12 @@ set(CMAKE_DEBUG_POSTFIX d CACHE STRING "Debug filename postfix.")
 option(LOGBENCH_DEBUG "MSVC setting for Debug config (Non optimized build for Debug.)" OFF)
 mark_as_advanced(FORCE LOGBENCH_DEBUG CMAKE_DEBUG_POSTFIX CMAKE_EXPORT_COMPILE_COMMANDS)
 
-#------------------------
-# shared lib/tests check
-#------------------------
-if (BUILD_SHARED_LIBS AND LOGBENCH_TESTS)
-        message( FATAL_ERROR "Can not build tests project with shared library. (Disable LOGBENCH_TESTS or build a static library.)" )
-endif()
-
 #----------------------
 # C++ standard setting
 #----------------------
 set(CMAKE_CXX_STANDARD 20 CACHE STRING "C++ standard version")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-if( CMAKE_CXX_STANDARD VERSION_LESS 17 )
-  message( FATAL_ERROR "Minimum C++17 required!" )
-else()
-    message(STATUS "C++ Standard = ${CMAKE_CXX_STANDARD}")
-endif()
 
 #----------------------------------------
 # Hiding non API symbols from shared lib
@@ -65,13 +53,13 @@ if(is_multi_config)
         set(CMAKE_CONFIGURATION_TYPES Release;Debug CACHE STRING "Multi-config configurations." FORCE)
     endif()
     set(BUILD_TYPE_MSG "Multi-config (${CMAKE_CONFIGURATION_TYPES})")
-    message(STATUS "Genearator: ${CMAKE_GENERATOR} (multi-config).")
+    set(GENERATOR_MSG "${CMAKE_GENERATOR} (multi-config)")
 else()
     if (NOT CMAKE_BUILD_TYPE)
         set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build type, Release/Debug/..." FORCE)
     endif()
-    message(STATUS "Genearator: ${CMAKE_GENERATOR} (single-config).") 
     set(BUILD_TYPE_MSG ${CMAKE_BUILD_TYPE})
+    set(GENERATOR_MSG "${CMAKE_GENERATOR} (single-config)")
 endif()
 
 #----------------------
@@ -81,7 +69,18 @@ set(STAT_OR_SHARE Static)
 if(BUILD_SHARED_LIBS)
     set(STAT_OR_SHARE Shared)
 endif()
-message(STATUS     "PROJECT ${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_VERSION} ${STAT_OR_SHARE} ${BUILD_TYPE_MSG}")
+message(STATUS "=================================================================================")
+message(STATUS "${PROJECT_NAME} ${PROJECT_VERSION} ${STAT_OR_SHARE} ${BUILD_TYPE_MSG} C++${CMAKE_CXX_STANDARD}")
+message(STATUS "---------------------------------------------------------------------------------")
+if( CMAKE_CXX_STANDARD VERSION_LESS 17 )
+  message( FATAL_ERROR "Minimum C++17 required to build logbech!" )
+endif()
+set(LOGBENCH_TARGETS_BUILT "logbench_lib, logbench")
+if (LOGBENCH_TESTS)
+    set(LOGBENCH_TARGETS_BUILT "${LOGBENCH_TARGETS_BUILT}, tests")
+endif()
+message(STATUS "Targets: ${LOGBENCH_TARGETS_BUILT}.")
+message(STATUS "Generator: ${GENERATOR_MSG}.")
 
 #-----------------
 # Output dirs 
@@ -118,8 +117,11 @@ if(MSVC)
             /GS-                #disable buffer security checks
             /sdl-                #disable additional security checks
         )
-        if(CMAKE_CONFIGURATION_TYPES OR (CMAKE_BUILD_TYPE MATCHES "^([Dd][Ee][Bb][Uu][Gg])$"))
-            message(STATUS "Configuring optimized Debug, to debug logbench, use -DLOGBENCH_DEBUG=ON.")
+        if(is_multi_config OR (CMAKE_BUILD_TYPE MATCHES "^([Dd][Ee][Bb][Uu][Gg])$"))
+            message(STATUS "Windows Debug Build Configuration: -DLOGBENCH_DEBUG=OFF")
+            message(STATUS "    Making optimized debug build (debug CRT + optimizations).")
+            message(STATUS "    This provides better performance while debugging your code.")
+            message(STATUS "    Only use -DLOGBENCH_DEBUG=ON if you need to debug logbech's internal code.")
         endif()
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_RELEASE}")
         set(CMAKE_C_FLAGS_FLAGS_DEBUG "${CMAKE_C_FLAGS_RELEASE}" CACHE STRING "Flags used by the C compiler during DEBUG builds." FORCE)
@@ -129,10 +131,13 @@ if(MSVC)
         set(CMAKE_STATIC_LINKER_FLAGS_DEBUG "${CMAKE_STATIC_LINKER_FLAGS_RELEASE}" CACHE STRING "Flags used by the linker during the creation of static libraries during DEBUG builds." FORCE)
         set(CMAKE_RC_FLAGS_DEBUG "${CMAKE_RC_FLAGS_RELEASE}" CACHE STRING "Flags for Windows Resource Compiler during DEBUG builds." FORCE)
         STRING( REPLACE "/MD" "/MDd" CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG} )
+        STRING( REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG} )
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}" CACHE STRING "Flags used by the CXX compiler during DEBUG builds." FORCE)
     else()
-        if(CMAKE_CONFIGURATION_TYPES OR (CMAKE_BUILD_TYPE MATCHES "^([Dd][Ee][Bb][Uu][Gg])$"))
-            message(STATUS "Configuring Debug to debug logbench, to make optimized Debug, use -DLOGBENCH_DEBUG=OFF")
+        if(is_multi_config OR (CMAKE_BUILD_TYPE MATCHES "^([Dd][Ee][Bb][Uu][Gg])$"))
+            message(STATUS "Windows Debug Build Configuration: -DLOGBENCH_DEBUG=ON")
+            message(STATUS "    Making usual debug build (debug CRT with no optimizitions).")
+            message(STATUS "    Only use -DLOGBENCH_DEBUG=ON if you need to debug logbech's internal code.")
         endif()
     endif()
 else()
@@ -140,23 +145,21 @@ else()
         -fno-rtti
     )
 endif()
+message(STATUS "=================================================================================")
 
 #------------------------
 # logbench library target
 #------------------------
-message(STATUS "Generating logbench library.")
 add_subdirectory(logbench_lib)
 
 #----------------------
 # logbench executable target
 #----------------------
-message(STATUS "Generating logbench bin.")
 add_subdirectory(logbench)
 
 #----------------------
 # tests target
 #----------------------
 if (LOGBENCH_TESTS)
-    message(STATUS "Generating tests.")
     add_subdirectory(tests)
 endif()

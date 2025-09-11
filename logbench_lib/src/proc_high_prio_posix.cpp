@@ -1,6 +1,8 @@
 //Copyright © 2024, Dénes Derhán.
 //Distributed under the MIT license (https://opensource.org/license/mit).
 #ifndef _WIN32
+#include <logbench/proc_high_prio.hpp>
+
 #include <sys/time.h>
 #include <sys/resource.h>
 

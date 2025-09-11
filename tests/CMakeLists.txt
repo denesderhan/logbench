@@ -27,6 +27,11 @@ target_include_directories(logbench_tests PRIVATE
     "../logbench_lib/src"
 )
 
+target_compile_definitions(logbench_tests PRIVATE
+    "LOGBENCH_DEBUG"
+    "LOGBENCH_TESTING"
+)
+
 ################################################################################
 # Dependencies
 ################################################################################

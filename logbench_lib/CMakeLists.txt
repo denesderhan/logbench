@@ -82,6 +82,11 @@ if(BUILD_SHARED_LIBS)
         PUBLIC "LOGBENCH_SHARED"
         PRIVATE "LOGBENCH_EXPORT"
     )
+    if(LOGBENCH_TESTS)
+        target_compile_definitions(logbench
+            PRIVATE "LOGBENCH_TESTING"
+        )
+    endif()
 endif()
 
 if(NOT(MSVC) OR LOGBENCH_DEBUG)
