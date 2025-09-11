@@ -75,7 +75,10 @@ source_group("src" FILES ${src})
 add_library(logbench ${ALL_FILES})
 add_library(logbench::logbench ALIAS logbench)
 target_link_libraries(logbench PUBLIC Threads::Threads)
-set_target_properties(logbench PROPERTIES VERSION ${LOGBENCHLIB_VERSION} SOVERSION  ${LOGBENCHLIB_VERSION_MAJOR}.${LOGBENCHLIB_VERSION_MINOR})
+set_target_properties(logbench PROPERTIES 
+    VERSION ${LOGBENCHLIB_VERSION} 
+    SOVERSION  ${LOGBENCHLIB_VERSION_MAJOR}.${LOGBENCHLIB_VERSION_MINOR}
+)
 
 if(BUILD_SHARED_LIBS)
     target_compile_definitions(logbench

@@ -2,4 +2,19 @@
 
 include("${CMAKE_CURRENT_LIST_DIR}/logbenchTargets.cmake")
 
+# Set version variables for easy access by consumers
+set(logbench_VERSION "@LOGBENCHLIB_VERSION@")
+set(logbench_VERSION_MAJOR "@LOGBENCHLIB_VERSION_MAJOR@")
+set(logbench_VERSION_MINOR "@LOGBENCHLIB_VERSION_MINOR@")
+set(logbench_VERSION_PATCH "@LOGBENCHLIB_VERSION_PATCH@")
+
+# Explicitly set VERSION and SOVERSION on the imported target
+set_target_properties(logbench::logbench PROPERTIES
+    VERSION "${logbench_VERSION}"
+    SOVERSION "${logbench_VERSION_MAJOR}.${logbench_VERSION_MINOR}"
+)
+
+# Set logbench_FOUND for consistency
+set(logbench_FOUND TRUE)
+
 check_required_components(logbench)
