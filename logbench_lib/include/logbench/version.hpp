@@ -1,14 +1,29 @@
 //Copyright © 2024, Dénes Derhán.
 //Distributed under the MIT license (https://opensource.org/license/mit).
 #pragma once
-#define LOGBENCHLIB_VERSION_MAJOR 0
-#define LOGBENCHLIB_VERSION_MINOR 14
-#define LOGBENCHLIB_VERSION_PATCH 4
 
-#define LOGBENCHLIB_STRINGIFY_IMPL(X) #X
-#define LOGBENCHLIB_STRINGIFY(X) LOGBENCHLIB_STRINGIFY_IMPL(X)
+#include <logbench/api_def.hpp>
 
-#define LOGBENCHLIB_VERSION LOGBENCHLIB_STRINGIFY(\
-    LOGBENCHLIB_VERSION_MAJOR)"."\
-    LOGBENCHLIB_STRINGIFY(LOGBENCHLIB_VERSION_MINOR)"."\
-    LOGBENCHLIB_STRINGIFY(LOGBENCHLIB_VERSION_PATCH)
+#define LOGBENCHLIB_HEADER_VERSION_MAJOR 0
+#define LOGBENCHLIB_HEADER_VERSION_MINOR 14
+#define LOGBENCHLIB_HEADER_VERSION_PATCH 5
+
+namespace logbench {
+    LOGBENCH_API int version_major() noexcept;
+    LOGBENCH_API int version_minor() noexcept;
+    LOGBENCH_API int version_patch() noexcept;
+    LOGBENCH_API const char* version() noexcept;
+
+    inline bool compatible() noexcept {
+        if constexpr (LOGBENCHLIB_HEADER_VERSION_MAJOR == 0) {
+            return logbench::version_major() == LOGBENCHLIB_HEADER_VERSION_MAJOR
+                && logbench::version_minor() == LOGBENCHLIB_HEADER_VERSION_MINOR
+                && logbench::version_patch() == LOGBENCHLIB_HEADER_VERSION_PATCH;
+        }
+        // backwards compatibility
+        else {
+            return logbench::version_major() == LOGBENCHLIB_HEADER_VERSION_MAJOR
+                && logbench::version_minor() >= LOGBENCHLIB_HEADER_VERSION_MINOR;
+        }
+    }
+}

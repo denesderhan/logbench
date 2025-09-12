@@ -40,6 +40,10 @@ int main(int argc, char* argv[])
 {
     logbench::proc_max_power pow_g;
     try {
+        if (!logbench::compatible()) {
+            throw std::runtime_error("logbench was compiled with mismatched headers/library, fix and recompile!");
+        }
+        
         logbench::test_in_param input_par;
         input_par.pin_to_cores.first = 0;
         std::size_t max_core{ std::size_t(std::thread::hardware_concurrency()) - 1};

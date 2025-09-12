@@ -62,6 +62,7 @@ set(src
     "src/test_run.cpp"
     "src/thread_high_prio_posix.cpp"
     "src/thread_high_prio_win.cpp"
+    "src/version.cpp"
 )
 
 set(ALL_FILES 

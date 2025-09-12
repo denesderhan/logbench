@@ -16,14 +16,19 @@ namespace logbench {
         logtest() = delete;
         logtest(const char* test_name) {
             try {
+                if (!compatible()) {
+                    throw std::runtime_error("The benchmark binary was compiled with mismatched logbench headers/library, fix and recompile!");
+                }
                 bench_data_.open();
                 bench_data_.get_data(test_data_);
                 //FIX THIS fill out_data_ !!! from logger
                 bench_data_.get_data(out_data_);
                 if (test_data_.bench_version != 
-                    std::string_view{ LOGBENCHLIB_VERSION })
+                    std::string_view{ version() })
                 {
-                    std::string error_msg = "Logbench library versions mismatch! benchmark bin: " LOGBENCHLIB_VERSION " logbench: ";
+                    std::string error_msg = "Logbench library versions mismatch! benchmark binary: ";
+                    error_msg += std::string_view{ version() };
+                    error_msg += " logbench: ";
                     error_msg += std::string_view{ test_data_.bench_version };
                     throw std::runtime_error(error_msg);
                 }

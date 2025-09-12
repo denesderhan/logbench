@@ -7,8 +7,8 @@ set(src
 source_group("Source Files" FILES ${src})
 
 set(unit_tests
-    "unit_tests/to_hexstring.cpp"
     "unit_tests/rdtsc_frequency.cpp"
+    "unit_tests/to_hexstring.cpp"
 )
 
 source_group("unit_tests" FILES ${unit_tests})
@@ -16,7 +16,7 @@ source_group("unit_tests" FILES ${unit_tests})
 set(ALL_FILES
     ${src}
     ${unit_tests}
-)
+ )
 
 add_executable(logbench_tests ${ALL_FILES})
 set_target_properties(logbench_tests PROPERTIES 

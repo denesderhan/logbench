@@ -3,13 +3,15 @@
 #pragma once
 #include <cstddef>
 #include <vector>
+
 #include <logbench/api_def.hpp>
+#include <logbench/test_in_param.hpp>
+#include <logbench/test_out_param.hpp>
+#include <logbench/test_result_thread.hpp>
 
 namespace logbench {
     class ipc_data;
-    struct test_in_param;
-    struct test_out_param;
-    struct test_result_thread;
+
     class bench_data {
     public:
         LOGBENCH_API bench_data() noexcept;

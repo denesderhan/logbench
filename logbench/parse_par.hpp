@@ -123,7 +123,7 @@ inline bool parse_par(
 
     if (end) {
         std::cout << argv[0] << " version " << LOGBENCH_VERSION << '\n'
-        << "logbench.lib version " << LOGBENCHLIB_VERSION << '\n';
+        << "logbench.lib version " << logbench::version() << '\n';
         return false;
     }
 

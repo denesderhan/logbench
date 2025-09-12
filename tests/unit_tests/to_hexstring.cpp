@@ -2,69 +2,52 @@
 //Distributed under the MIT license (https://opensource.org/license/mit).
 #include <catch2/catch_all.hpp>
 
+#include <logbench/to_hexstring.hpp>
+
+#include <limits>
+#include <string>
+#include <string_view>
 #include <iostream>
 #include <cstdint>
 #include <sstream>
-#include <logbench/to_hexstring.hpp>
 
 TEST_CASE("to_hexstring") {
-    SECTION("uint32_t_1") {
-        std::uint32_t num = 0;
+    SECTION("uint32_t") {
+        auto data = GENERATE(
+            std::pair<std::uint32_t, std::string_view>{0ull, "0x0"},
+            std::pair<std::uint32_t, std::string_view>{(std::numeric_limits<std::uint32_t>::max)(), "0xffffffff"},
+            std::pair<std::uint32_t, std::string_view>{1ull, "0x1"}, 
+            std::pair<std::uint32_t, std::string_view>{0x1234abcdull, "0x1234abcd"}, 
+            std::pair<std::uint32_t, std::string_view>{0xef56789ull, "0xef56789"}, 
+            std::pair<std::uint32_t, std::string_view>{0xfffffffeull, "0xfffffffe"}, 
+            std::pair<std::uint32_t, std::string_view>{0xfffffffull, "0xfffffff"});
+        
+        auto num = data.first;
+        auto str = data.second;
         CAPTURE(num);
-        auto result{logbench::to_hexstring<false>(num)};
-        CHECK(result == "0");
-        result = logbench::to_hexstring(num);
-        CHECK(result == "0x0");
-
-        num = UINT32_MAX;
-        CAPTURE(num);
+        auto result = logbench::to_hexstring(num);
+        CHECK(result == str);
         result = logbench::to_hexstring<false>(num);
-        CHECK(result == "ffffffff");
-        result = logbench::to_hexstring(num);
-        CHECK(result == "0xffffffff");
-
+        CHECK(result == std::string_view{ str.data() + 2, str.size() - 2});        
     };
 
-    SECTION("uint32_t_rand") {
-        std::uint32_t num = GENERATE(take(10000, random(std::uint32_t(0), std::uint32_t(UINT32_MAX))));
-        CAPTURE(num);
-        auto result{logbench::to_hexstring<false>(num)};
-        std::stringstream exp;
-        exp << std::hex << num;
-        CHECK(result == exp.str());
-        result = logbench::to_hexstring(num);
-        std::string exp2{"0x"};
-        exp2.append(exp.str());
-        CHECK(result == exp2);
+    SECTION("uint64_t") {
+        auto data = GENERATE(
+            std::pair<std::uint64_t, std::string_view>{0ull, "0x0"},
+            std::pair<std::uint64_t, std::string_view>{(std::numeric_limits<std::uint64_t>::max)(), "0xffffffffffffffff"},
+            std::pair<std::uint64_t, std::string_view>{1ull, "0x1"},
+            std::pair<std::uint64_t, std::string_view>{0x1234abcdull, "0x1234abcd"},
+            std::pair<std::uint64_t, std::string_view>{0xef56789ull, "0xef56789"},
+            std::pair<std::uint64_t, std::string_view>{0xabcdef1234567890ull, "0xabcdef1234567890"},
+            std::pair<std::uint64_t, std::string_view>{0xfffffffffffffffeull, "0xfffffffffffffffe"},
+            std::pair<std::uint64_t, std::string_view>{0xfffffffffffffffull, "0xfffffffffffffff"});
 
-    };
-
-    SECTION("uint64_t_1") {
-        std::uint64_t num = 0;
+        auto num = data.first;
+        auto str = data.second;
         CAPTURE(num);
-        auto result{ logbench::to_hexstring<false>(num) };
-        CHECK(result == "0");
-        result = logbench::to_hexstring(num);
-        CHECK(result == "0x0");
-
-        num = UINT64_MAX;
-        CAPTURE(num);
-        auto result2 = logbench::to_hexstring<false>(num);
-        CHECK(result2 == "ffffffffffffffff");
-        result = logbench::to_hexstring(num);
-        CHECK(result == "0xffffffffffffffff");
-    };
-
-    SECTION("uint64_t_rand") {
-        std::uint64_t num = GENERATE(take(10000, random(std::uint32_t(0), std::uint32_t(UINT64_MAX))));
-        CAPTURE(num);
-        auto result{logbench::to_hexstring<false>(num)};
-        std::stringstream exp;
-        exp << std::hex << num;
-        CHECK(result == exp.str());
-        result = logbench::to_hexstring(num);
-        std::string exp2{"0x"};
-        exp2.append(exp.str());
-        CHECK(result == exp2);
+        auto result = logbench::to_hexstring(num);
+        CHECK(result == str);
+        result = logbench::to_hexstring<false>(num);
+        CHECK(result == std::string_view{ str.data() + 2, str.size() - 2 });
     };
 }
