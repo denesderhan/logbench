@@ -6,7 +6,7 @@
 
 #define LOGBENCHLIB_HEADER_VERSION_MAJOR 0
 #define LOGBENCHLIB_HEADER_VERSION_MINOR 14
-#define LOGBENCHLIB_HEADER_VERSION_PATCH 5
+#define LOGBENCHLIB_HEADER_VERSION_PATCH 6
 
 namespace logbench {
     LOGBENCH_API int version_major() noexcept;
@@ -17,8 +17,7 @@ namespace logbench {
     inline bool compatible() noexcept {
         if constexpr (LOGBENCHLIB_HEADER_VERSION_MAJOR == 0) {
             return logbench::version_major() == LOGBENCHLIB_HEADER_VERSION_MAJOR
-                && logbench::version_minor() == LOGBENCHLIB_HEADER_VERSION_MINOR
-                && logbench::version_patch() == LOGBENCHLIB_HEADER_VERSION_PATCH;
+                && logbench::version_minor() == LOGBENCHLIB_HEADER_VERSION_MINOR;
         }
         // backwards compatibility
         else {
