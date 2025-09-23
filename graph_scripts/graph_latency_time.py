@@ -2,6 +2,7 @@
 #Distributed under the MIT license (https://opensource.org/license/mit).
 import sys
 import os
+from set_html_background import set_html_background
 import numpy as np
 from pathlib import Path
 import pandas as pd
@@ -14,25 +15,28 @@ from bokeh.palettes import Category20
 from bokeh.layouts import column
 
 def get_latencies(file_path):
-    dfx = pd.read_csv(file_path)
-    dfx = dfx.loc[dfx['thread'] == 0]
-    dfx = dfx[['time', 'latency']]
-    dfx['time'] = dfx['time'] / 1000000000
-    col_latency = Path(file_path).stem
-    col_time = "time_" + col_latency
-    dfx.rename(columns={'time': col_time, 'latency': col_latency}, inplace=True)
-    return dfx
+	dfx = pd.read_csv(file_path)
+	dfx = dfx.loc[dfx['thread'] == 0]
+	dfx = dfx[['time', 'latency']]
+	dfx['time'] = dfx['time'] / 1000000000
+	col_latency = Path(file_path).stem
+	col_time = "time_" + col_latency
+	dfx.rename(columns={'time': col_time, 'latency': col_latency}, inplace=True)
+	return dfx
 
 dstat = pd.read_csv('results\\logtest1_t4_l1500_w100000_d30000_latency_0x358db4ae.csv')
 
 name_string = 'latency_time_50'
 if len(sys.argv) > 1 :
-    if str(sys.argv[1]) == 'a' :
-        dstat = dstat[((dstat['latency_median'] > 100.0) & (dstat['latency_median'] <= 10000.0))]
-        name_string += '_a'
-    elif str(sys.argv[1]) == 'b' :
-        dstat = dstat[dstat['latency_median'] > 10000.0]
-        name_string += '_b'
+	if str(sys.argv[1]) == 'a' :
+		dstat = dstat[((dstat['latency_median'] > 100.0) & (dstat['latency_median'] <= 10000.0))]
+		name_string += '_a'
+	elif str(sys.argv[1]) == 'b' :
+		dstat = dstat[dstat['latency_median'] > 10000.0]
+		name_string += '_b'
+
+if dstat.empty:
+	sys.exit("No data in range, exiting.")
 
 x_max = dstat['latency_99th'].max()
 x_min = dstat['latency_min'].min()
@@ -46,21 +50,21 @@ file_list = [ f for f in file_list0 if f in file_list1]
 
 dfs = []
 for f in file_list:
-    dfs.append(get_latencies(f))
+	dfs.append(get_latencies(f))
 
 y_max = 0
 for d in dfs:
-    yy_max = d.tail(1).iloc[0,0]
-    if yy_max > y_max:
-        y_max = yy_max
+	yy_max = d.tail(1).iloc[0,0]
+	if yy_max > y_max:
+		y_max = yy_max
 
 list_size = len(dfs)
 
 df = dfs[0]
 ind = 1
 while ind < list_size :
-    df = df.join(dfs[ind])
-    ind = ind + 1
+	df = df.join(dfs[ind])
+	ind = ind + 1
 
 cols_list = df.columns.tolist()
 lib_names = cols_list[1::2]
@@ -72,18 +76,19 @@ output_file(filename=name_string +'.html', title=name_string)
 curdoc().theme = 'dark_minimal'
 source = ColumnDataSource(df)
 
-p = figure(x_range=[-1, y_max + 1], y_range=[x_min, x_max], y_axis_type = "log", width=1200, height=600)
+p = figure(x_range=[-1, y_max + 1], y_range=[x_min, x_max], y_axis_type = "log", width=1500, height=600)
+p.sizing_mode = 'stretch_width'
 p.add_layout(Legend(orientation="horizontal"), 'below')
 
 for ind in reversed(range(0, len(lib_names))):
-    legend_label = lib_names[ind]
-    legend_label = '_'.join(legend_label.split("_")[:2])
-    color=Category20[20][ind%20]
-    p.line(x=lib_times[ind], y=lib_names[ind],
-             source=source,
-             line_width=1,
-             line_color=color,
-             legend_label = legend_label)
+	legend_label = lib_names[ind]
+	legend_label = '_'.join(legend_label.split("_")[:2])
+	color=Category20[20][ind%20]
+	p.line(x=lib_times[ind], y=lib_names[ind],
+			 source=source,
+			 line_width=1,
+			 line_color=color,
+			 legend_label = legend_label)
 
 p.title.text_font_size = '16pt'
 p.title.align = 'center'
@@ -105,3 +110,5 @@ p.legend.click_policy='hide'
 p.add_layout(Title(text='benchmark:    logbench ./bin -o ./results -c 10000 -b ./ramdrive -t 4 -p 1 5 -l 1500 -w 100000 -d 30000 --dropped\nlog call:           LOG("Thr: {} Log_n: {} Time: {} {} {}", (int) thread, (uint64_t) log_no, (uint64_t) nanosec, double(123.456789), <float>::infinity());\noutput:            2024-08-04 17:58:43.734915 +0200 INFO .../logger.hpp:42 Thr: 1 Log_n: 1 Time: 1202671383528328 123.456789 inf', align="left", text_color='#909090'), "below")
 
 save(p)
+name_string = name_string + '.html'
+set_html_background(name_string, '#444444')

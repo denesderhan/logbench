@@ -1,11 +1,14 @@
 #Copyright © 2024, Dénes Derhán.
 #Distributed under the MIT license (https://opensource.org/license/mit).
+from set_html_background import set_html_background
 import pandas as pd
 from bokeh.plotting import figure, output_file, save
 from bokeh.models import ColumnDataSource, PrintfTickFormatter, LabelSet, Title
 from bokeh.io import curdoc
 
-output_file(filename='throughput.html', title='throughput')
+file_name = 'throughput.html'
+
+output_file(filename= file_name, title='throughput')
 
 df = pd.read_csv('results/logtest1_t4_l100000_w0_d0_0x358db4ae.csv')
 df = df[df['lib_name'] != 'noop']
@@ -17,7 +20,8 @@ df.sort_values(by=['throughput'], ascending=False , inplace=True)
 curdoc().theme = 'dark_minimal'
 source = ColumnDataSource(df)
 
-p = figure(x_range=source.data['name'], width=1200, height=400)
+p = figure(x_range=source.data['name'], width=1500, height=400)
+p.sizing_mode = 'stretch_width'
 p.vbar(x='name', top='throughput', bottom = 0, source=source, width=0.70, color='green', fill_alpha=0.7, line_color=None)
 p.title.text_font_size = '16pt'
 p.title.align = 'center'
@@ -25,7 +29,7 @@ p.title.text ='Max throughput of log system'
 p.yaxis.axis_label = 'Throughput (1000 lines / second)'
 p.yaxis.formatter = PrintfTickFormatter(format="%1.1f")
 p.xaxis.major_label_orientation = 0.5
-p.xgrid.grid_line_color = None    #remove the x grid lines
+p.xgrid.grid_line_color = None	#remove the x grid lines
 p.y_range.start = 0
 p.ygrid.grid_line_color = '#a0a0a0'
 p.ygrid.minor_grid_line_color = '#303030'
@@ -36,3 +40,4 @@ label = LabelSet(x='name', y=0.03, text='throughput', level='glyph', text_align=
 p.add_layout(label)
 
 save(p)
+set_html_background(file_name, '#444444')
