@@ -21,7 +21,7 @@ namespace logbench {
         }
 
         auto core = core_interval.first;
-        for (int i = 0; i < thread_to_core_.size(); i++) {
+        for (std::size_t i = 0; i < thread_to_core_.size(); i++) {
             thread_to_core_[i] = core++;
             if (core > core_interval.second) core = core_interval.first;
         }

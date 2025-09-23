@@ -26,4 +26,9 @@ namespace logbench {
     const char* version() noexcept {
         return LOGBENCHLIB_VERSION;
     }
+
+    const char* version_nopatch() noexcept {
+        return LOGBENCHLIB_STRINGIFY(LOGBENCHLIB_HEADER_VERSION_MAJOR)"."
+            LOGBENCHLIB_STRINGIFY(LOGBENCHLIB_HEADER_VERSION_MINOR)".";
+    }
 }

@@ -16,7 +16,7 @@ namespace logbench {
         small_string<256> out_path{};
         small_string<256> temp_path{};
         small_string<256> log_path{};
-        small_string<64> bench_version{version()};
+        small_string<64> bench_version{ version_nopatch() };
         //work done before a log call
         std::uint64_t work_cycles{ 0 };
         //targeted duration of test run

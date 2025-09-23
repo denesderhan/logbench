@@ -6,13 +6,14 @@
 
 #define LOGBENCHLIB_HEADER_VERSION_MAJOR 0
 #define LOGBENCHLIB_HEADER_VERSION_MINOR 14
-#define LOGBENCHLIB_HEADER_VERSION_PATCH 6
+#define LOGBENCHLIB_HEADER_VERSION_PATCH 7
 
 namespace logbench {
     LOGBENCH_API int version_major() noexcept;
     LOGBENCH_API int version_minor() noexcept;
     LOGBENCH_API int version_patch() noexcept;
     LOGBENCH_API const char* version() noexcept;
+    LOGBENCH_API const char* version_nopatch() noexcept;
 
     inline bool compatible() noexcept {
         if constexpr (LOGBENCHLIB_HEADER_VERSION_MAJOR == 0) {

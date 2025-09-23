@@ -24,10 +24,10 @@ namespace logbench {
                 //FIX THIS fill out_data_ !!! from logger
                 bench_data_.get_data(out_data_);
                 if (test_data_.bench_version != 
-                    std::string_view{ version() })
+                    std::string_view{ version_nopatch() })
                 {
                     std::string error_msg = "Logbench library versions mismatch! benchmark binary: ";
-                    error_msg += std::string_view{ version() };
+                    error_msg += std::string_view{ version_nopatch() };
                     error_msg += " logbench: ";
                     error_msg += std::string_view{ test_data_.bench_version };
                     throw std::runtime_error(error_msg);

@@ -40,9 +40,11 @@ namespace logbench {
             return num;
         }
         else {
-            static_assert(CHAR_BIT == 8);
-            constexpr int bit_size{ sizeof(DWORD) * 8 };
-            constexpr std::size_t bit_mask{ std::size_t(-1) >> ((sizeof(std::size_t) - sizeof(DWORD)) * 8) };
+            static_assert(CHAR_BIT == 8, "This code assumes 8-bit bytes.");
+#pragma warning(push)
+#pragma warning(disable:4293) // Disable shift too big warning
+            constexpr std::size_t bit_mask{ (std::size_t(1) << (sizeof(DWORD) * CHAR_BIT)) - 1 };
+#pragma warning(pop)
             return static_cast<DWORD>(num & bit_mask);
         }
     }
@@ -52,9 +54,12 @@ namespace logbench {
             return 0;
         }
         else {
-            static_assert(CHAR_BIT == 8);
-            constexpr int bit_size{ sizeof(DWORD) * 8 };
+            static_assert(CHAR_BIT == 8, "This code assumes 8-bit bytes.");
+            constexpr std::size_t bit_size{ sizeof(DWORD) * 8 };
+#pragma warning(push)
+#pragma warning(disable:4293) // Disable shift too big warning
             return static_cast<DWORD>(num >> bit_size);
+#pragma warning(pop)
         }
     }
 
