@@ -3,6 +3,7 @@
 #pragma once
 #include <logbench/logtest.hpp>
 
+#include <vector>
 #include <thread>
 #include <limits>
 #include <cstdint>
@@ -22,44 +23,33 @@ namespace logbench {
             try {
                 proc_high_prio();
 
-                std::array<std::thread, 32> test_threads;
+                std::vector<std::thread> test_threads;
                 const int thr_num = this->test_data_.thread_num;
-                if (thr_num > 32) {
-                    throw std::runtime_error("Thread number is max 32!");
-                }
                 latch start_latch(thr_num + 1);
                 this->set_begin_logging_time();
                 if (this->test_data_.save_latency) {
                     for (int thread_id = 0; thread_id < thr_num; thread_id++) {
-                        auto temp{
+                        test_threads.emplace_back(
                             std::thread(
                                 logger_thread<logger, logtest1, true>,
                                 thread_id,
                                 std::ref(start_latch),
-                                std::ref(this->bench_data_)
-                            )
-                        };
-                        test_threads[thread_id].swap(temp);
+                                std::ref(this->bench_data_)));
                     }
                 }
                 else {
                     for (int thread_id = 0; thread_id < thr_num; thread_id++) {
-                        auto temp{
+                        test_threads.emplace_back(
                             std::thread(
                                 logger_thread<logger, logtest1, false>,
                                 thread_id,
                                 std::ref(start_latch),
-                                std::ref(this->bench_data_)
-                            )
-                        };
-                        test_threads[thread_id].swap(temp);
+                                std::ref(this->bench_data_)));
                     }
                 }
 
                 start_latch.wait();
-                for (int t = 0; t < thr_num; t++) {
-                    test_threads[t].join();
-                }
+                for (auto& t : test_threads) t.join();
             }
             catch (const std::exception& ex) {
                 this->out_data_.out_message = std::string_view{ ex.what() };
