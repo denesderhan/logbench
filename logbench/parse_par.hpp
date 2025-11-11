@@ -64,11 +64,11 @@ static std::string input_par_str(logbench::test_in_param& inpar) {
     out += std::to_string(inpar.pin_to_cores.first);
     out += ' ';
     out += std::to_string(inpar.pin_to_cores.second);
-    out += " --buffer_size ";
+    out += " --buffersize ";
     out += std::to_string(inpar.lib_buffer_size);
-    out += " --buffer_flush ";
+    out += " --bufferflush ";
     out += std::to_string(inpar.buffer_flush_time);
-    out += " --sink_flush ";
+    out += " --sinkflush ";
     out += std::to_string(inpar.sink_flush_time);
     if (inpar.save_latency) out += " --latency ";
     if (inpar.log_self) out += " --logself ";
