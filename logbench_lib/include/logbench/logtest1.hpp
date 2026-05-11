@@ -3,16 +3,16 @@
 #pragma once
 #include <logbench/logtest.hpp>
 
-#include <vector>
-#include <thread>
-#include <limits>
+#include <cinttypes>
 #include <cstdint>
+#include <limits>
 #include <stdexcept>
+#include <thread>
+#include <vector>
 
-#include <logbench/proc_high_prio.hpp>
-#include <logbench/logger_thread.hpp>
 #include <logbench/latch.hpp>
-#include <logbench/force_inline.hpp>
+#include <logbench/logger_thread.hpp>
+#include <logbench/proc_high_prio.hpp>
 
 namespace logbench {
    
@@ -58,14 +58,29 @@ namespace logbench {
             }
         }
 
-        LOGBENCH_FORCEINLINE static void log(
+        static void log(
             logger& logger_,
-            int id, 
+            int id,
             std::uint64_t i,
             [[maybe_unused]] std::uint64_t thr_dummy,
             std::uint64_t call_time)
         {
-            logger_.log_test1(id, i, call_time, double(123.456789), std::numeric_limits<float>::infinity());
+#if defined LOGBENCH_LOGCALL_FMT
+            LOGBENCH_LOG_INFO(logger_, "Thr: {} Log_n: {} Time: {} {} {}", id, i, call_time, \
+                double(123.456789), std::numeric_limits<float>::infinity());
+#elif defined LOGBENCH_LOGCALL_PRINTF
+            LOGBENCH_LOG_INFO(logger_, "Thr: %d Log_n: %" PRIu64 " Time: %" PRIu64 " %f %f", \
+                id, i, call_time, double(123.456789), std::numeric_limits<float>::infinity());
+#elif defined LOGBENCH_LOGCALL_PRINTF_CUSTOM
+            LOGBENCH_LOG_INFO(logger_, "Thr: " CUSTOM_FMT_INT32 " Log_n: " CUSTOM_FMT_UINT64 \
+                " Time: " CUSTOM_FMT_UINT64 " " CUSTOM_FMT_DOUBLE " " CUSTOM_FMT_FLOAT, \
+                id, i, call_time, double(123.456789), std::numeric_limits<float>::infinity());
+#elif defined LOGBENCH_LOGCALL_STREAM
+            LOGBENCH_LOG_INFO(logger_) << "Thr: " << id << " Log_n: " << i << " Time: " \
+                << call_time << " " << double(123.456789) << " " << std::numeric_limits<float>::infinity();
+#else
+#error "The logcall format of the logging library is not supported!"
+#endif
         }
     };
 }

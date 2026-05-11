@@ -5,8 +5,8 @@
 #include <logbench/api_def.hpp>
 
 #define LOGBENCHLIB_HEADER_VERSION_MAJOR 0
-#define LOGBENCHLIB_HEADER_VERSION_MINOR 14
-#define LOGBENCHLIB_HEADER_VERSION_PATCH 8
+#define LOGBENCHLIB_HEADER_VERSION_MINOR 15
+#define LOGBENCHLIB_HEADER_VERSION_PATCH 0
 
 namespace logbench {
     LOGBENCH_API int version_major() noexcept;
