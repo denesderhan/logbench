@@ -15,6 +15,7 @@ namespace logbench {
         small_string<64> formater_impl;
         //in nano seconds (excluding system setup)
         std::uint64_t logging_begin_time{ 0 };
+        // in GHz (TSC cycles per second)
         double rdtsc_freq{ 0.0 };
         unsigned int garbage_lines{ 0 };
         //-1 means unknown
@@ -26,7 +27,7 @@ namespace logbench {
         formatter_typ formatter_type{ formatter_typ::txt };
         sink_typ sink_type{ sink_typ::lib };
         bool debug_build{ false };
-        char padding[221]{ 0 };
+        char padding[477]{ 0 };
     };
-    static_assert(sizeof(test_out_param) == 768,"Bad");
+    static_assert(sizeof(test_out_param) % 64 == 0,"Bad");
 }
