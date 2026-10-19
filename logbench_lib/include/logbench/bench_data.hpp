@@ -42,7 +42,7 @@ namespace logbench {
         LOGBENCH_API bool initialized() const;
         LOGBENCH_API void clear_result();
         // Returns average latency in TSC cycles (including TSC call overhead)
-        LOGBENCH_API double avg_latency_tsc() const;
+        LOGBENCH_API std::uint64_t avg_latency_tsc() const;
         LOGBENCH_API std::vector<double> get_latencies() const;
     private:
         void set_data_sizes() noexcept;

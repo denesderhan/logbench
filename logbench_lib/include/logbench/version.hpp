@@ -5,7 +5,7 @@
 #include <logbench/api_def.hpp>
 
 #define LOGBENCHLIB_HEADER_VERSION_MAJOR 0
-#define LOGBENCHLIB_HEADER_VERSION_MINOR 17
+#define LOGBENCHLIB_HEADER_VERSION_MINOR 18
 #define LOGBENCHLIB_HEADER_VERSION_PATCH 0
 
 namespace logbench {

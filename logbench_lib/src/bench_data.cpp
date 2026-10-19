@@ -144,28 +144,22 @@ namespace logbench {
         return ipc_buffer;
     }
 
-    double bench_data::avg_latency_tsc() const {
+    std::uint64_t bench_data::avg_latency_tsc() const {
+        if (thread_num_ == 0) return 0;
         std::uint64_t sum_lat{ 0 };
-        std::uint64_t sum_log{ 0 };
         for (unsigned int t = 0; t < thread_num_; t++) {
             logbench::test_result_thread t_data;
             get_thread_data(t, t_data);
-            // max latency 1'000'000'000 (1sec) max log num : 1'000'000, max threads: 1024 is less than UINT64MAX
-            sum_lat += t_data.sum_latency;
-            sum_log += t_data.log_num;
+            sum_lat += t_data.avg_latency;
         }
-        if (sum_log == 0) {
-            return 0.0;
-        }
-        else {
-            return double(sum_lat) / double(sum_log);
-        }
+        return sum_lat / thread_num_;
     }
 
     std::vector<double> bench_data::get_latencies() const {
         std::vector<double> latencies;
         std::size_t dat_size{ std::size_t(thread_num_) * log_num_ };
         if (dat_size == 0) return latencies;
+      
         test_out_param op;
         get_data(op);
         const auto rdtsc_f{ op.rdtsc_freq };
