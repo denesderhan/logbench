@@ -3,7 +3,9 @@
 #ifndef _WIN32
 #include <logbench/pin_thread.hpp>
 
+#include <cerrno>
 #include <sched.h>
+#include <system_error>
 
 namespace logbench {
     void pin_thread::pin(int thread_number) {
@@ -12,7 +14,10 @@ namespace logbench {
             cpu_set_t mask;
             CPU_ZERO(&mask);
             CPU_SET(core_num, &mask);
-            sched_setaffinity(0, sizeof(cpu_set_t), &mask);
+
+            if (sched_setaffinity(0, sizeof(mask), &mask) != 0) {
+                throw std::system_error(errno, std::generic_category(), "Could not pin thread to core!");
+            }
         }
     }
 }
