@@ -195,59 +195,43 @@ namespace logbench {
         if (!latency_file.good()) {
             throw std::runtime_error("Latency file path invalid!");
         }
-        std::uint64_t min_start{ UINT64_MAX };
+        std::uint64_t begin_time{ UINT64_MAX };
         for (unsigned int t = 0; t < in_param_.thread_num; t++) {
-            std::uint64_t first_time;
+            latency_record first_data;
             memcpy(
-                &first_time,
+                &first_data,
                 b_data_.latency_data(t),
-                sizeof(std::uint64_t)
+                sizeof(latency_record)
             );
-            if (first_time < min_start) {
-                min_start = first_time;
+            if (first_data.nano_time < begin_time) {
+                begin_time = first_data.nano_time;
             }
         }
 
         latency_file << latency_result_header_ << "\n";
         for (unsigned int t = 0; t < in_param_.thread_num; t++) {
             logbench::test_result_thread thr_data;
-            b_data_.get_data(t, thr_data);
+            b_data_.get_thread_data(t, thr_data);
             auto dat_ptr = b_data_.latency_data(t);
             for (int l = 0; l < thr_data.log_num; l++) {
-                std::uint64_t start;
+                latency_record rec;
                 memcpy(
-                    &start,
+                    &rec,
                     dat_ptr,
-                    sizeof(std::uint64_t)
+                    sizeof(latency_record)
                 );
-                dat_ptr += sizeof(std::uint64_t);
-                std::uint64_t stop;
-                memcpy(
-                    &stop,
-                    dat_ptr,
-                    sizeof(std::uint64_t)
-                );
-                dat_ptr += sizeof(std::uint64_t);
-                std::uint32_t core1;
-                memcpy(
-                    &core1,
-                    dat_ptr,
-                    sizeof(std::uint32_t)
-                );
-                dat_ptr += sizeof(std::uint32_t);
-                std::uint32_t core2;
-                memcpy(
-                    &core2,
-                    dat_ptr,
-                    sizeof(std::uint32_t)
-                );
-                dat_ptr += sizeof(std::uint32_t);
+                dat_ptr += sizeof(latency_record);
 
-                latency_file << double(start - min_start) / out_param_.rdtsc_freq;
-                latency_file << ',' << double(stop - start) / out_param_.rdtsc_freq;
+                latency_file << rec.nano_time - begin_time;
+                if (rec.tsc_stop < rec.tsc_start) {
+                    latency_file << ',INF';
+                }
+                else {
+                    latency_file << ',' << double(rec.tsc_stop - rec.tsc_start) / out_param_.rdtsc_freq;
+                }
                 latency_file << ',' << t;
-                latency_file << ',' << core1;
-                latency_file << ',' << core2;
+                latency_file << ',' << rec.cpu_1;
+                latency_file << ',' << rec.cpu_2;
                 latency_file << "\n";
             }
         }

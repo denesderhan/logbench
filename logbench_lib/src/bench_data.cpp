@@ -50,15 +50,14 @@ namespace logbench {
     }
 
     void bench_data::set_data_sizes() noexcept {
-        std::size_t test_data = sizeof(test_in_param) + sizeof(test_out_param);
-        test_data_size_ = ((test_data / page_size_) + 1 ) * page_size_;
+        constexpr std::size_t test_data_size = sizeof(test_in_param) + sizeof(test_out_param);
+        test_data_size_ = ((test_data_size / page_size_) + 1 ) * page_size_;
+        
+        std::size_t thread_data_size = sizeof(test_result_thread);
         if (latencies_) {
-            std::size_t thread_unpadded_size = sizeof(test_result_thread) + ((sizeof(std::uint64_t) * 2 + sizeof(std::uint32_t) * 2) * log_num_);
-            thread_data_size_ = ((thread_unpadded_size / page_size_) + 1) * page_size_;
+            thread_data_size += sizeof(latency_record) * log_num_;
         }
-        else {
-            thread_data_size_ = ((sizeof(test_result_thread) / page_size_) + 1) * page_size_;
-        }
+        thread_data_size_ = ((thread_data_size / page_size_) + 1) * page_size_;
     }
     
     void bench_data::get_data(test_in_param& data) const noexcept {
@@ -77,6 +76,7 @@ namespace logbench {
             sizeof(test_out_param)
         );
     }
+
     void bench_data::get_data(test_out_param& data) const noexcept {
         assert(ipc_buffer().initialized());
         memcpy(
@@ -85,7 +85,8 @@ namespace logbench {
             sizeof(test_out_param)
         );
     }
-    void bench_data::set_data(unsigned int thread_index, test_result_thread const& data) noexcept {
+
+    void bench_data::set_thread_data(unsigned int thread_index, test_result_thread const& data) noexcept {
         assert(ipc_buffer().initialized());
         memcpy(
             thread_data(thread_index), 
@@ -93,7 +94,8 @@ namespace logbench {
             sizeof(test_result_thread)
         );
     }
-    void bench_data::get_data(unsigned int thread_index, test_result_thread& data) const noexcept{
+
+    void bench_data::get_thread_data(unsigned int thread_index, test_result_thread& data) const noexcept{
         assert(ipc_buffer().initialized());
         memcpy(
             &data, 
@@ -147,7 +149,7 @@ namespace logbench {
         std::uint64_t sum_log{ 0 };
         for (unsigned int t = 0; t < thread_num_; t++) {
             logbench::test_result_thread t_data;
-            get_data(t, t_data);
+            get_thread_data(t, t_data);
             // max latency 1'000'000'000 (1sec) max log num : 1'000'000, max threads: 1024 is less than UINT64MAX
             sum_lat += t_data.sum_latency;
             sum_log += t_data.log_num;
@@ -163,37 +165,30 @@ namespace logbench {
     std::vector<double> bench_data::get_latencies() const {
         std::vector<double> latencies;
         std::size_t dat_size{ std::size_t(thread_num_) * log_num_ };
-        if (dat_size != 0) {
-            test_out_param op;
-            get_data(op);
-            const auto rdtsc_f{ op.rdtsc_freq };
-            latencies.reserve(dat_size);
-            for (unsigned int t = 0; t < thread_num_; t++) {
-                logbench::test_result_thread thr_data;
-                get_data(t, thr_data);
-                auto dat_ptr = latency_data(t);
-                for (int l = 0; l < thr_data.log_num; l++) {
-                    std::uint64_t start;
-                    memcpy(
-                        &start,
-                        dat_ptr,
-                        sizeof(std::uint64_t)
-                    );
-                    dat_ptr += sizeof(std::uint64_t);
-                    std::uint64_t stop;
-                    memcpy(
-                        &stop,
-                        dat_ptr,
-                        sizeof(std::uint64_t)
-                    );
-                    dat_ptr += sizeof(std::uint64_t) + 2 * sizeof(std::uint32_t);
-                    double lat = double(stop - start) / rdtsc_f;
-                    latencies.push_back(lat);
+        if (dat_size == 0) return latencies;
+        test_out_param op;
+        get_data(op);
+        const auto rdtsc_f{ op.rdtsc_freq };
+        latencies.reserve(dat_size);
+        for (unsigned int t = 0; t < thread_num_; t++) {
+            logbench::test_result_thread thr_data;
+            get_thread_data(t, thr_data);
+            auto dat_ptr = latency_data(t);
+            for (int l = 0; l < thr_data.log_num; l++) {
+                latency_record rec;
+                memcpy(
+                    &rec,
+                    dat_ptr,
+                    sizeof(rec)
+                );
+                dat_ptr += sizeof(rec);
+                if (rec.cpu_1 != rec.cpu_2 || rec.tsc_stop < rec.tsc_start) {
+                    continue;
                 }
+                double lat = double(rec.tsc_stop - rec.tsc_start) / rdtsc_f;
+                latencies.push_back(lat);
             }
         }
         return latencies;
     }
-
-    static_assert(sizeof(test_result_thread) % 8 == 0);
 }

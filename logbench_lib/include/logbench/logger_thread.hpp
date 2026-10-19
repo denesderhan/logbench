@@ -53,30 +53,18 @@ namespace logbench {
             const std::uint64_t latency_stop = timestamp_tsc(id2);
 
             if constexpr (with_latencies) {
+                latency_record rec;
+                rec.tsc_start = latency_start;
+                rec.tsc_stop = latency_stop;
+                rec.nano_time = timestamp_nano();
+                rec.cpu_1 = id1;
+                rec.cpu_2 = id2;
                 memcpy(
                     latency_ptr,
-                    &latency_start,
-                    sizeof(std::uint64_t)
+                    &rec,
+                    sizeof(rec)
                 );
-                latency_ptr += sizeof(std::uint64_t);
-                memcpy(
-                    latency_ptr,
-                    &latency_stop,
-                    sizeof(std::uint64_t)
-                );
-                latency_ptr += sizeof(std::uint64_t);
-                memcpy(
-                    latency_ptr,
-                    &id1,
-                    sizeof(std::uint32_t)
-                );
-                latency_ptr += sizeof(std::uint32_t);
-                memcpy(
-                    latency_ptr,
-                    &id2,
-                    sizeof(std::uint32_t)
-                );
-                latency_ptr += sizeof(std::uint32_t);
+                latency_ptr += sizeof(rec);
             }
             int use_log{
                 (id1 == id2)
@@ -108,6 +96,6 @@ namespace logbench {
             p_timer.sleep(test_dur_targ - sum_time);
         }
         data.test_stop = timestamp_nano();
-        b_data.set_data(thread_id, data);
+        b_data.set_thread_data(thread_id, data);
     }
 }

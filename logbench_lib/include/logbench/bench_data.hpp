@@ -12,6 +12,14 @@
 namespace logbench {
     class ipc_data;
 
+    struct alignas(32) latency_record {
+        std::uint64_t tsc_start;
+        std::uint64_t tsc_stop;
+        std::uint32_t cpu_1;
+        std::uint32_t cpu_2;
+        std::uint64_t nano_time;
+    };
+
     class bench_data {
     public:
         LOGBENCH_API bench_data() noexcept;
@@ -28,11 +36,12 @@ namespace logbench {
         LOGBENCH_API void get_data(test_in_param& data) const noexcept;
         LOGBENCH_API void set_data(test_out_param const& data) noexcept;
         LOGBENCH_API void get_data(test_out_param& data) const noexcept;
-        LOGBENCH_API void set_data(unsigned int thread_index, test_result_thread const & data) noexcept;
-        LOGBENCH_API void get_data(unsigned int thread_index, test_result_thread& data) const noexcept;
+        LOGBENCH_API void set_thread_data(unsigned int thread_index, test_result_thread const & data) noexcept;
+        LOGBENCH_API void get_thread_data(unsigned int thread_index, test_result_thread& data) const noexcept;
         LOGBENCH_API char* latency_data(unsigned int thread_index) const noexcept;
         LOGBENCH_API bool initialized() const;
         LOGBENCH_API void clear_result();
+        // Returns average latency in TSC cycles (including TSC call overhead)
         LOGBENCH_API double avg_latency_tsc() const;
         LOGBENCH_API std::vector<double> get_latencies() const;
     private:
