@@ -7,16 +7,20 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <stdexcept>
 #include <vector>
 #pragma intrinsic(memcpy)
 
+#include <logbench/fnv_hash.hpp>
 #include <logbench/is_exec.hpp>
 #include <logbench/rdtsc_frequency.hpp>
 #include <logbench/store_path.hpp>
 #include <logbench/test_result_thread.hpp>
+#include <logbench/timestamp_tsc.hpp>
+#include <logbench/to_hexstring.hpp>
 #include <run_proc.hpp>
 
 namespace logbench {
@@ -36,6 +40,10 @@ namespace logbench {
     intmax_t test_run::run(std::string const& exec_path) noexcept
     {
         try {
+            if (!tsc_ok() || !tsc_invariant()) {
+                throw std::runtime_error("TSC timestamp is not reliable on this system!");
+            }
+            
             if (!is_exec(std::filesystem::path{ exec_path })) {
                 throw std::runtime_error("Path is not executable!");
             }
