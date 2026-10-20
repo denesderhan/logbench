@@ -3,7 +3,7 @@
 spearmans_footrule.py
 
 Computes the Spearman's footrule distance between the current and the ordered sets.
-The Spearman's footrule distance is a non-negative measure of the difference 
+The Spearman's footrule distance is a non-negative measure of the difference
 or disagreement of two ordered lists, each of which is a full permutation of a set.
 
 Usage: python spearmans_footrule.py <log_file> timestamp_index [--quiet|--verbose max_num]
@@ -16,30 +16,31 @@ def parse_time_to_nanoseconds(time_str: str):
     """
     Efficiently converts time string (HH:MM:SS.ffffff) to nanoseconds since midnight.
     """
+    time_str = time_str.replace(',', '.')
     if '.' in time_str:
         main, frac = time_str.split('.', 1)
-    elif ',' in time_str:
-        main, frac = time_str.split(',', 1)
     else:
         main = time_str
         frac = '0'
+    frac = frac.replace('\'', '')
+    frac = frac.replace('"', '')
     frac = frac.ljust(9, '0')[:9]  # Ensure 9 digits, pad with zeros if needed, truncate if longer
-        
+    
     if ':' in main:
         parts = main.split(':')
     else:
-       raise ValueError(f"Invalid time format: {time_str}") 
+        return False, int(0) 
     
     if len(parts) != 3:
-        raise ValueError(f"Invalid time format: {time_str}")
+        return False, int(0)
         
     try:
         hh, mm, ss = map(int, parts)
         nano = int(frac)
     except ValueError:
-        raise ValueError(f"Invalid time format: {time_str}")
+        return False, int(0)
 
-    return hh * 3_600_000_000_000 + mm * 60_000_000_000 + ss * 1_000_000_000 + nano
+    return True, hh * 3_600_000_000_000 + mm * 60_000_000_000 + ss * 1_000_000_000 + nano
 
 def detect_encoding(file_path, chunk_size=1024):
     with open(file_path, 'rb') as f:
@@ -83,7 +84,7 @@ if len(sys.argv) >= 4:
         abort()
  
 """
-Processes the log file line-by-line.
+Processes the log file line-by-line. 
 """
 footrule_distance = 0
 line_count = 0
@@ -113,7 +114,8 @@ with open(filename, 'r', encoding=file_encoding) as f:
             time = int(time_str)
         except ValueError:
             try:
-                time = parse_time_to_nanoseconds(time_str)
+                success, time = parse_time_to_nanoseconds(time_str)
+                if not success : sys.exit("Error: Timestamp was malformed!")
             except (ValueError, IndexError):
                 sys.exit("Error: Timestamp was malformed!")
         
